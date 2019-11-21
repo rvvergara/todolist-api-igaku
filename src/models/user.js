@@ -21,13 +21,21 @@ const UserSchema = new mongoose.Schema({
         throw new Error('Please put a valid email');
       }
     },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minLength: 7,
-    },
   },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minLength: 7,
+  },
+});
+
+UserSchema.pre('save', async function (next) {
+  const user = this;
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+  return next();
 });
 
 module.exports = mongoose.model('User', UserSchema);
