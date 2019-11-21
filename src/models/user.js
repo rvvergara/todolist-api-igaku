@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Todo = require('./todo');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -39,13 +40,30 @@ const UserSchema = new mongoose.Schema({
   ],
 });
 
+// Virtual attributes
+UserSchema.virtual('todos', {
+  ref: 'Todo',
+  localField: '_id',
+  foreignField: 'owner',
+});
+
 // Middlewares
+// 1. Hash new password (during user create and updating of password)
 UserSchema.pre('save', async function (next) {
   const user = this;
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   return next();
+});
+
+// 2. Delete all user's Todos prior to user getting deleted
+UserSchema.pre('remove', async function (next) {
+  const user = this;
+  await Todo.deleteMany({
+    owner: user._id,
+  });
+  next();
 });
 
 // Static methods
