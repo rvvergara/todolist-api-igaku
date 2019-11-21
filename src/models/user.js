@@ -82,5 +82,14 @@ UserSchema.methods.generateAuthToken = async function () {
   return token;
 };
 
+// 2. Method to choose which fields to send back as response
+UserSchema.methods.toJSON = function () {
+  const user = this;
+  const obj = user.toObject();
+  delete obj.password;
+  delete obj.tokens;
+  return obj;
+};
+
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
