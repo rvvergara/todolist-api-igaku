@@ -1,16 +1,8 @@
 const express = require('express');
-const User = require('../models/user');
+const sessionsController = require('../controllers/sessions');
 
 const router = new express.Router();
 
-router.post('/v1/sessions', async (req, res) => {
-  try {
-    const user = await User.findByCredentials(req.body.email, req.body.password);
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
-  } catch (e) {
-    res.status(401).send(e);
-  }
-});
+router.post('/v1/sessions', sessionsController.create);
 
 module.exports = router;
