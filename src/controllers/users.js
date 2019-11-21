@@ -1,15 +1,7 @@
 const User = require('../models/user');
 
 exports.show = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      res.status(404).send({ error: 'Cannot find user' });
-    }
-    res.send(user);
-  } catch (e) {
-    res.status(500);
-  }
+  res.send(req.user);
 };
 
 exports.create = async (req, res) => {
@@ -33,11 +25,10 @@ exports.update = async (req, res) => {
     return res.status(422).send({ error: 'Disallowed field/s' });
   }
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
-    return user ? res.status(202).send(user) : res.status(404).send({ error: 'Cannot find user' });
+    const user = await req.user;
+    updates.forEach(update => user[update] = req.body[update]);
+    await user.save();
+    return res.status(202).json(user);
   } catch (e) {
     return res.status(422).send(e.errors);
   }
@@ -45,9 +36,9 @@ exports.update = async (req, res) => {
 
 exports.destroy = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    return user ? res.status(202).send({ success: 'User deleted' }) : res.status(404).send({ error: 'Cannot find user' });
+    await req.user.remove();
+    res.status(202).send({ success: 'User deleted' });
   } catch (e) {
-    return res.status(500);
+    res.status(500);
   }
 };
