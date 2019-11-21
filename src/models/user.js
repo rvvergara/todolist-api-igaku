@@ -90,7 +90,7 @@ UserSchema.methods.generateAuthToken = async function () {
     {
       _id: user._id.toString(),
     },
-    'mysecretkey',
+    process.env.SECRET_KEY,
     {
       expiresIn: '1 day',
     },
