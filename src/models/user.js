@@ -39,6 +39,13 @@ const UserSchema = new mongoose.Schema({
   ],
 });
 
+// Virtual attributes
+UserSchema.virtual('todos', {
+  ref: 'Todo',
+  localField: '_id',
+  foreignField: 'owner',
+});
+
 // Middlewares
 UserSchema.pre('save', async function (next) {
   const user = this;
