@@ -1,8 +1,8 @@
 const express = require('express');
 require('./db/mongoose');
-const User = require('./models/user');
 const Todo = require('./models/todo');
 const userRouter = require('./routes/user');
+const sessionRouter = require('./routes/session');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,19 +10,10 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.use(userRouter);
+app.use(sessionRouter);
 
 app.get('/', async (req, res) => {
   res.send('Welcome from express');
-});
-
-app.post('/v1/sessions', async (req, res) => {
-  try {
-    const user = await User.findByCredentials(req.body.email, req.body.password);
-    const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
-  } catch (e) {
-    res.status(401).send(e);
-  }
 });
 
 app.post('/v1/todos', async (req, res) => {
