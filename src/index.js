@@ -1,6 +1,7 @@
 const express = require('express');
 require('./db/mongoose');
 const User = require('./models/user');
+const Todo = require('./models/todo');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -30,6 +31,16 @@ app.post('/v1/sessions', async (req, res) => {
     res.status(201).send({ user, token });
   } catch (e) {
     res.status(401).send(e);
+  }
+});
+
+app.post('/v1/todos', async (req, res) => {
+  const todo = new Todo(req.body);
+  try {
+    await todo.save();
+    res.status(201).send(todo);
+  } catch (e) {
+    res.status(422).send(e);
   }
 });
 
