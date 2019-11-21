@@ -1,0 +1,40 @@
+{
+  "name": "todolist-api-igaku",
+  "version": "1.0.0",
+  "description": "[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rvvergara/todolist-api-igaku.git"
+  },
+  "keywords": [
+    "node-js",
+    "express-js",
+    "javascript",
+    "api",
+    "json"
+  ],
+  "author": "Ryan Vergara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rvvergara/todolist-api-igaku/issues"
+  },
+  "homepage": "https://github.com/rvvergara/todolist-api-igaku#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.7.12",
+    "validator": "^12.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "nodemon": "^2.0.0"
+  }
+}
