@@ -11,6 +11,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     unique: true,
     lowercase: true,
+    validate(value) {
+      if (value.match(/[^a-zA-Z0-9]/g)) {
+        throw new Error('Only letters and numbers are allowed username');
+      }
+    },
   },
   email: {
     type: String,
@@ -29,6 +34,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true,
     minLength: 7,
+    validate(value) {
+      if (value.length < 7) {
+        throw new Error('Password should have at least 7 characters');
+      }
+    },
   },
   tokens: [
     {
